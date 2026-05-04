@@ -19,7 +19,7 @@ def updateGame(who, number):
     board[number] = who
     board_screen = board_screen.replace(str(number), who)
     board_blank.discard(number)
-   # print(who, number)
+    print(f' {who}가 {number}번 칸에 놓았습니다.')
 
 import random
 def getComputerNumber():
@@ -27,8 +27,8 @@ def getComputerNumber():
     #    if board[i] == " ":
     #        return i
     if board_blank:
-    #    return board_blank.pop()
-        return random.choice(list(board_blank))
+        return board_blank.pop()
+    #    return random.choice(list(board_blank))
     return -1
 
 def isWin(turn):
