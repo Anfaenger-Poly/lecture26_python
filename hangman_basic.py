@@ -14,6 +14,7 @@ blank_char = '_'
 word_screen = blank_char * len(target_word)
 
 num_error = 0
+used_chars = set() # 이미 입력된 알파벳
 while num_error < limit_error:
 
     # 2. 사용자 알파벳 입력
@@ -30,11 +31,17 @@ while num_error < limit_error:
                 word_screen = word_screen[:i] + user_input + word_screen[i+1:]
         print('정답 :', word_screen)
 
-    # 4. 단어를 다 맞췄으면(word_screen에 _가 없으면) 사용자 win
+    # 4. 이미 입력한 알파벳이면 다시 입력
+    if user_input in used_chars:
+        print(f'>> 이미 입력한 알파벳입니다 : {used_chars}')
+        continue
+    used_chars.add(user_input)
+
+    # 5. 단어를 다 맞췄으면(word_screen에 _가 없으면) 사용자 win
     if word_screen.count(blank_char) == 0:
         print("win")
         break
 
-# 5. 틀렸으면 계속 진행, 시도 횟수가 7회 이상이면 loose
+# 6. 틀렸으면 계속 진행, 시도 횟수가 7회 이상이면 loose
 if num_error >= limit_error:
     print("loose : ", target_word)
