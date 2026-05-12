@@ -71,15 +71,16 @@ while True:
         if aservice.create_account(account_no, owner, balance):
             print('결과 : 계좌가 생성되었습니다')
 
-    elif menu == 2: # 계좌목록
+    # 계좌목록
+    elif menu == 2:
         account_list = aservice.list_account()
         print('==================================')
         print('===============계좌===============')
         print('==================================')
         for account in account_list:
             print(account)
-
-    elif menu == 3: # 입금
+    # 입금
+    elif menu == 3:
         print('==================================')
         print('===============예금===============')
         print('==================================')
@@ -87,7 +88,8 @@ while True:
         amount = int(input('> 예금액 : '))
         aservice.deposit(account_no, amount)
 
-    elif menu == 4: # 출금
+    # 출금
+    elif menu == 4:
         print('==================================')
         print('===============출금===============')
         print('==================================')
