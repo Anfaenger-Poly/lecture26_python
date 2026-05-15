@@ -92,7 +92,7 @@ while True:
         user_id = input('> 아이디 : ')
         pw = input('> 비밀번호 : ')
         name = input('> 이름 : ')
-        phone = (input('> 전화번호 : '))
+        phone = input('> 전화번호 : ')
         address = input('> 주소 : ')
         if mservice.register_member(user_no, user_id, pw, name, phone, address):
             print('결과 : 회원가입이 완료되었습니다')
