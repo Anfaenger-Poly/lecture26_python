@@ -1,6 +1,8 @@
 import random
+import os
+
 class Hangman:
-    MAX_TRY = 7
+    MAX_TRY = 10
     MASK_CHAR = '_'
     RIGHT = 1
     WRONG = 0
@@ -8,33 +10,35 @@ class Hangman:
     WIN = 1
     LOOSE = 0
     CONTINUE = -1
-    ERROR = -2
-    
+
     def __init__(self, word_list):
-        self.word = random.choice(word_list).upper() # 대문자로 변환
+        self.word = random.choice(word_list)
         self.display_word = Hangman.MASK_CHAR * len(self.word) # 글자 수 만큼
         self.num_try = 0
-        self.input_letters = [] # 입력한 알파벳
-        self.error_status = ""
+        self.tried_letters = [] # 이미 시도한 알파벳
+        self.error_status = ''
+
+    @staticmethod
+    def load_words(filename):
+        word_list = []
+        with open(filename, encoding='utf-8') as f_read:
+            for i in f_read:
+                words = i.split()
+                if words:
+                    word_list.append(words[0])
+        return word_list
 
     def check_letter(self, letter):
-        letter = letter.upper()
-        if not letter.isalpha():
-            self.error_status = '알파벳을 입력하세요.'
-            return Hangman.ERROR
-        # 이미 입력했던 문자인지 확인
-        if letter in self.input_letters:
-            self.error_status = f'이미 입력한 알파벳입니다. {self.input_letters}'
+        # 이미 입력한 알파벳이면 EXIST 반환
+        if letter in self.tried_letters:
+            self.error_status = f'"{letter}"already attempted.'
             return Hangman.EXIST
-        self.input_letters.append(letter)
-        
+        self.tried_letters.append(letter)
+        # 알파벳이 단어에 있으면 display_word에서 위치를 찾아 수정
         if self.word.count(letter) > 0:
-            # 알파벳이 단어에 있으면 display_word에서 위치를 찾아 수정
-            display_list = list(self.display_word)
             for i in range(len(self.word)):
                 if self.word[i] == letter:
-                    display_list[i] = letter
-            self.display_word = ''.join(display_list)
+                    self.display_word = self.display_word[:i] + letter + self.display_word[i+1:]
             return Hangman.RIGHT
         else:
             self.num_try += 1
