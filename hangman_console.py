@@ -1,8 +1,12 @@
 from hangman import Hangman
+import os
 
 print()
 print('==========Hangman==========')
-word_list = ['apple', 'banana', 'man', 'woman', 'tomato']
+
+#filename = 'voca.txt'
+filename = os.path.join(os.path.dirname(__file__), 'voca.txt')
+word_list = Hangman.load_words(filename)
 
 # 단어 선택
 hangman = Hangman(word_list)

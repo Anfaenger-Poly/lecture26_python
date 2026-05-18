@@ -1,6 +1,8 @@
 import random
+import os
+
 class Hangman:
-    MAX_TRY = 7
+    MAX_TRY = 10
     MASK_CHAR = '_'
     RIGHT = 1
     WRONG = 0
@@ -13,6 +15,16 @@ class Hangman:
         self.display_word = Hangman.MASK_CHAR * len(self.word) # 글자 수 만큼
         self.num_try = 0
         self.tried_letters = [] # 이미 시도한 알파벳
+
+    @staticmethod
+    def load_words(filename):
+        word_list = []
+        with open(filename, encoding='utf-8') as f_read:
+            for i in f_read:
+                words = i.split()
+                if words:
+                    word_list.append(words[0])
+            return word_list
 
     def check_letter(self, letter):
         # 이미 입력한 알파벳이면 EXIST 반환
