@@ -1,52 +1,5 @@
-class Account:
-    def __init__(self, account_no, owner, balance):
-        self.__account_no = account_no
-        self.__owner = owner
-        self.__balance = balance
-
-    def __str__(self):
-        return f'{self.__account_no}\t{self.__owner}\t{self.__balance}'
-    
-    def deposit(self, amount):
-        self.__balance += amount
-    def withdraw(self, amount):
-        self.__balance -= amount
-
-    def get_account_no(self):
-        return self.__account_no
-    def get_owner(self):
-        return self.__owner
-    def get_balance(self):
-        return self.__balance
-
-class AccountService:
-    def __init__(self):
-        self.__account_list = []
-
-    def create_account(self, account_no, owner, balance):
-        account = Account(account_no, owner, balance)
-        self.__account_list.append(account)
-        return True
-
-    def list_account(self):
-        return self.__account_list
-    
-    def deposit(self, account_no, amount):
-        for account in self.__account_list:
-            if account.get_account_no() == account_no:
-                account.deposit(amount)
-                return True
-        return False
-
-    def withdraw(self, account_no, amount):
-        for account in self.__account_list:
-            if account.get_account_no() == account_no:
-                account.withdraw(amount)
-                break
+from account import AccountService
         
-        
-    
-
 # 메뉴와 사용자 interaction에 따른 서비스 호출
 def select_menu():
     print('======================================================')
@@ -55,48 +8,54 @@ def select_menu():
     menu = int(input('>> 메뉴 선택'))
     return menu
 
-aservice = AccountService()
+def start_console_bank(aservice):
+    aservice = AccountService()
 
-print()
-print('=====================meine Bank=====================')
-while True:
-    menu = select_menu()
-    if menu == 0: break
-    elif menu == 1:
-        # 계좌번호, 계좌주, 잔액 입력을 받아서 계좌 생성
-        account_no = input('> 계좌번호 :')
-        owner = input('> 계좌주 : ')
-        balance = int(input('> 초기입금액 : '))
+    print()
+    print('=====================meine Bank=====================')
+    while True:
+        menu = select_menu()
+        if menu == 0: break
+        elif menu == 1:
+            # 계좌번호, 계좌주, 잔액 입력을 받아서 계좌 생성
+            account_no = input('> 계좌번호 :')
+            owner = input('> 계좌주 : ')
+            balance = int(input('> 초기입금액 : '))
 
-        if aservice.create_account(account_no, owner, balance):
-            print('결과 : 계좌가 생성되었습니다')
+            if aservice.create_account(account_no, owner, balance):
+                print('결과 : 계좌가 생성되었습니다')
 
-    # 계좌목록
-    elif menu == 2:
-        account_list = aservice.list_account()
-        print('==================================')
-        print('===============계좌===============')
-        print('==================================')
-        for account in account_list:
-            print(account)
-    # 입금
-    elif menu == 3:
-        print('==================================')
-        print('===============예금===============')
-        print('==================================')
-        account_no = input('> 계좌번호')
-        amount = int(input('> 예금액 : '))
-        aservice.deposit(account_no, amount)
+        # 계좌목록
+        elif menu == 2:
+            account_list = aservice.list_account()
+            print('==================================')
+            print('===============계좌===============')
+            print('==================================')
+            for account in account_list:
+                print(account)
+        # 입금
+        elif menu == 3:
+            print('==================================')
+            print('===============예금===============')
+            print('==================================')
+            account_no = input('> 계좌번호')
+            amount = int(input('> 예금액 : '))
+            aservice.deposit(account_no, amount)
 
-    # 출금
-    elif menu == 4:
-        print('==================================')
-        print('===============출금===============')
-        print('==================================')
-        account_no = input('> 계좌번호')
-        amount = int(input('> 출금액 : '))
-        aservice.withdraw(account_no, amount)
+        # 출금
+        elif menu == 4:
+            print('==================================')
+            print('===============출금===============')
+            print('==================================')
+            account_no = input('> 계좌번호')
+            amount = int(input('> 출금액 : '))
+            aservice.withdraw(account_no, amount)
 
 
 
-print('==================이용해 주셔서 감사합니다==================')
+    print('==================이용해 주셔서 감사합니다==================')
+
+if __name__ == '__main__':
+    aservice = AccountService()
+    # 의존성 주입(dependency injection) : 외부에서 객체를 생성해서 전달하는 방식
+    start_console_bank(aservice) 
