@@ -1,70 +1,94 @@
+#======================
+# 데이터 모델 정의 : Member
 class Member:
-    def __init__(self, user_no, user_id, pw, name, phone, address):
-        self.__user_no = user_no
-        self.__id = user_id
-        self.__pw = pw
+    def __init__(self, id, password, name):
+        self.__member_no = 0 # 회원번호는 회원가입 시 자동으로 부여되므로 초기값은 0
+        self.__id = id
+        self.__password = password
         self.__name = name
-        self.__phone = phone
-        self.__address = address
 
-    def get_user_no(self): return self.__user_no
-    def get_id(self): return self.__id
-    def get_pw(self): return self.__pw
-    def get_name(self): return self.__name
-    def get_phone(self): return self.__phone
-    def get_address(self): return self.__address
-
-    def member_update(self, name, pw, phone, address):
-        self.__name = name
-        self.__pw = pw
-        self.__phone = phone
-        self.__address = address
+    def get_member_no(self):
+        return self.__member_no
+    
+    def get_id(self):
+        return self.__id
+    
+    def get_password(self):
+        return self.__password
+    
+    def get_name(self):
+        return self.__name
+    
+    def set_password(self, password):
+        self.__password = password
     
     def __str__(self):
-        return f'----------------------\n아이디: {self.__id}\n비밀번호: {self.__pw}\n이름: {self.__name}\n전화번호: {self.__phone}\n주소: {self.__address}'
-    
+        return f'{self.__member_no}\t{self.__id}\t{self.__name}\t{self.__password}'   
 
-    
-
-# 회원 관리 기능
+#==================
+# 회원 관리 서비스 로직 (Controller) : MemberService
 class MemberService:
-    def __init__(self):
-        self.__member_list = []
+    def __init__(self, memberDao):
+        self.__dao = memberDao # MemberDAO 객체를 받아 멤버 변수로 저장
 
-    # 회원가입
-    def register_member(self, user_no, user_id, pw, name, phone, address):
-        member = Member(user_no, user_id, pw, name, phone, address)
-        self.__member_list.append(member)
+    def join(self, member):
+        # 이미 있는 아이디인지 확인, 있으면 False, 없으면 회원가입 후 True 반환
+        if self.__dao.is_exist(member.get_id()):
+            return False
+        self.__dao.insert_member(member)
         return True
-    
-    # 회원목록
-    def member_list(self):
-        return self.__member_list
-    
-    # 회원상세정보
-    def info_member(self, user_no):
-        for member in self.__member_list:
-            if member.get_user_no() == user_no:
+
+    def login(self, id, password):
+        member = self.__dao.get_member_info(id)
+        if member:
+            if password == member.get_password():
                 return member
         return None
     
-    # 회원정보수정
-    def edit_member(self, user_no, pw, name, phone, address):
-        for member in self.__member_list:
-            if member.get_user_no() == user_no:
-                if member.get_pw() != pw:
-                    return False
-                member.member_update(name, pw, phone, address)
-                return True
+    def list_members(self):
+        member_list = self.__dao.get_all_members()
+        return member_list
+    
+    def get_member_info(self, id):
+        return self.__dao.get_member_info(id)
+    
+    def delete_member(self, id):
+        return self.__dao.delete_member(id)
+    
+    def update_member(self, member):
+        return self.__dao.update_member(member)
+
+#====================
+# 회원 데이터 접근 (CRUD) : MemberDAO 클래스 CRUD -> Create, Read, Update, Delete
+class MemberDAO:
+    def __init__(self):
+        self.__memberDB = {} # 회원번호를 key로, Member 객체를 value로 저장하는 딕셔너리
+    
+    def insert_member(self, member):
+        self.__memberDB[member.get_id()] = member
+
+    def is_exist(self, id):
+        if id in self.__memberDB.keys() : return True
+        return False
+    
+    def get_member_info(self, id):
+        if self.is_exist(id):
+            return self.__memberDB[id]
+        else:
+            return None
+        
+    def get_all_members(self):
+        return list(self.__memberDB.values()) # 회원번호, Member 객체 반환하는 리스트
+    
+    def update_member(self, member):
+        if self.is_exist(member.get_id()):
+            self.__memberDB[member.get_id()] = member
+            return True
         return False
         
-            
-    # 회원탈퇴
-    def del_member(self, user_no, pw):
-        for member in self.__member_list:
-            if member.get_user_no() == user_no:
-                if member.get_pw() != pw:
-                    return False
-                self.__member_list.remove(member)
-                return True
+    def delete_member(self, id):
+        if self.is_exist(id):
+            del self.__memberDB[id]
+            return True
         return False
+    
