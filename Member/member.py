@@ -92,3 +92,28 @@ class MemberDAO:
             return True
         return False
     
+# 클래스 동작 테스트 (단위테스트, unit test)
+if __name__ == '__main__':
+    dao = MemberDAO()
+    print(dao.is_exist('Woongseok'))
+
+    member = Member('Woongseok', '1234', '최웅석')
+    dao.insert_member(member)
+    member = Member('WSC', '1234', '1234')
+    dao.insert_member(member)
+    print(dao.get_member_info('Woongseok'))
+    print(dao.get_member_info('WSC'))
+
+    member = dao.get_member_info('Woongseok')
+    if member:
+        member.set_password('1111')
+        dao.update_member_info('Woongseok', member)
+
+    members = dao.get_all_members()
+    for member in members:
+        print(member)
+
+    if dao.delete_member('Woongseok'):
+        members = dao.get_all_members()
+        for member in members:
+            print(member)
