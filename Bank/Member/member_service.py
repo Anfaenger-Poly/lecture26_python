@@ -11,9 +11,9 @@ class MemberService:
     ADMIN_PASSWORD = '1234'
 
     def __init__(self, memberDao):
-        self.__dao = memberDao
-        self.join(Member(MemberService.ADMIN_ID, MemberService.ADMIN_PASSWORD, '관리자'))
-        self.current_user = None
+        self.__dao = memberDao # MemberDAO 객체를 받아 멤버 변수로 저장
+        self.join(Member(MemberService.ADMIN_ID, MemberService.ADMIN_PASSWORD, '관리자')) # 관리자 계정 생성
+        self.current_user = None # 로그인 상태 초기화
 
     def join(self, member):
 
@@ -22,7 +22,7 @@ class MemberService:
         # if not self.is_valid_id(member.get_id()):
         #     return False
         
-        # 이미 있는 아이디인지 확인
+        # 이미 있는 아이디인지 확인, 있으면 False, 없으면 회원가입 후 True 반환
         if self.__dao.is_exist(member.get_id()):
             return False
         
@@ -67,15 +67,15 @@ class MemberService:
 if __name__ == '__main__':
     ms = MemberService(MemberDAO())
     ms.join(Member('woongseok', '1234', '최웅석'))
-    ms.join(Member('curi', '1111', '큐리'))
+    ms.join(Member('cws', '1111', '웅석'))
     members = ms.list_members()
     for member in members:
         print(member)
-    ms.login('curi', '1111')
+    ms.login('cws', '1111')
     print(ms.current_user)
     ms.logout()
     print(ms.current_user)
-    print(ms.view_member_info('curi'))
+    print(ms.view_member_info('cws'))
     ms.login(MemberService.ADMIN_ID, MemberService.ADMIN_PASSWORD)
     print(ms.update_member_password('woongseok', '1234', '4321'))
     print(ms.view_member_info('woongseok'))

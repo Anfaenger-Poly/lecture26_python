@@ -47,7 +47,7 @@ if __name__ == '__main__':
     member = Member('curi', '1234', '1234')
     dao.insert_member(member)
     print(dao.get_member_info('woongseok'))
-    print(dao.get_member_info('curi'))
+    print(dao.get_member_info('cws'))
 
     members = dao.get_all_members()
     for member in members:

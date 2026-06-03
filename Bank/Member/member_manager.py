@@ -4,7 +4,7 @@ from member_service import MemberService
 
 class MemberManager:
     start_menu = ['종료', '로그인', '회원가입']
-    admin_menu = ['로그아웃', '회원목록', '회원정보조회', '회원강퇴']
+    admin_menu = ['관리자로그아웃', '회원목록', '회원정보조회', '회원강퇴']
     member_menu = ['로그아웃', '내정보조회', '내정보수정', '회원탈퇴']
 
     def __init__(self):
@@ -15,7 +15,7 @@ class MemberManager:
         self.show_welcome()
         # 테스트용
         # self.ms.join(Member('woongseok', '1234', '최웅석'))
-        # self.ms.join(Member('curi', '1234', '큐리'))
+        # self.ms.join(Member('cws', '1234', '웅석'))
         while True:
             menu = self.select_menu(MemberManager.start_menu)
             if menu == 0: break
@@ -27,6 +27,7 @@ class MemberManager:
                 print('없는 메뉴입니다.')
         self.say_goodbye()
 
+    # 로그인
     def menu_login(self):
         id = input('>> id : ')
         password = input('>> password : ')
@@ -39,6 +40,7 @@ class MemberManager:
         else:
             print('로그인에 실패하였습니다.')
 
+    # 회원가입
     def menu_join(self):
         id = input('>> id : ')
         password = input('>> password : ')
@@ -48,9 +50,13 @@ class MemberManager:
             print('회원가입이 완료되었습니다.')
         else:
             print('회원가입에 실패하였습니다.')
-        
+    
+    # 관리자 메뉴
     def start_admin_menu(self):
-        print('---------- 관리자 메뉴 ----------')
+        print('=' * 50)
+        title = '관리자 메뉴'
+        print(f'{title:^50}')
+        print('=' * 50)
         while True:
             menu = self.select_menu(MemberManager.admin_menu)
             if menu == 0: break
@@ -66,6 +72,7 @@ class MemberManager:
             else:
                 print('없는 메뉴입니다.')
 
+    # 회원 리스트
     def menu_member_list(self):
         print(self.ms.current_user)
         if self.ms.current_user != MemberService.ADMIN_ID:
@@ -73,28 +80,35 @@ class MemberManager:
             return
         
         member_list = self.ms.list_members()
-        if len(member_list) <= 1:
-            print('가입한 회원이 없습니다.')
+        if not member_list:
+            print('존재하지 않는 회원입니다.')
         else:
-            for member in member_list[1:]:
+            for member in member_list:
                 print(member)
 
+    # 회원 정보
     def menu_member_info(self):
-        id = input(">> id : ")
-        self.view_member_info(id)
+        user_id = input('>> 조회하실 회원 아이디를 입력하세요 : ')
+        self.view_member_info(user_id)
 
+    # 회원 강퇴
     def menu_member_remove(self):
-        id = input(">> id : ")
-        if self.ms.remove_member(id):
-            print('탈퇴 처리되었습니다.')
+        user_id = input('>> id : ')
+        if self.ms.remove_member(user_id):
+            print('강퇴 처리되었습니다.')
         else:
-            print('회원 탈퇴 처리에 실패하였습니다.')
+            print('회원 강퇴에 실패하였습니다.')
 
+    # 로그 아웃
     def menu_logout(self):
         self.ms.logout()
 
+    # 회원 메뉴
     def start_member_menu(self):
-        print('---------- 회원 메뉴 ----------')
+        print('=' * 50)
+        title = '회원 메뉴'
+        print(f'{title:^50}')
+        print('=' * 50)
         while True:
             menu = self.select_menu(MemberManager.member_menu)
             if menu == 0: break
@@ -104,29 +118,41 @@ class MemberManager:
                 self.menu_update_my_info()
             elif menu == 3:
                 self.menu_remove_member()
+                break
             elif menu == 4:
                 self.menu_logout()
 
+    # 내 정보 보기
     def menu_view_my_info(self):
         self.view_member_info(self.ms.current_user)
 
-    def view_member_info(self, id):
-        member = self.ms.view_member_info(id)
+    # 회원 정보 보기
+    def view_member_info(self, user_id):
+        member = self.ms.view_member_info(user_id)
         if member: print(member)
         else:
             print('없는 id입니다.')
 
+    # 비밀번호 수정
     def menu_update_my_info(self):
-        print('---- 비밀번호 변경 ----')
-        org_password = input('기존 패스워드 : ')
-        new_password = input('새 패스워트 : ')
+        print('=' * 50)
+        title = '비밀번호 변경'
+        print(f'{title:^50}')
+        print('=' * 50)
+        org_password = input('기존 비밀번호 : ')
+        new_password = input('새 비밀번호 : ')
         if self.ms.update_member_password(self.ms.current_user, org_password, new_password):
             print('비밀번호를 수정하였습니다.')
         else:
             print('비밀번호 수정에 실패하였습니다.')
 
+    # 회원 탈퇴
     def menu_remove_member(self):
-        pass
+        if self.ms.remove_member(self.ms.current_user):
+            print('탈퇴 처리되었습니다.')
+            self.ms.logout()
+        else:
+            print('탈퇴 처리에 실패했습니다.')
 
     def show_welcome(self):
         print('=' * 50)
