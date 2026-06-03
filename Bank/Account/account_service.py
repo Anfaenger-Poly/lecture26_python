@@ -2,7 +2,7 @@ from Account.account import Account
 from Account.account_dao import AccountDAO
 
 class AccountService:
-    account_no_seq = 111111
+    account_no_seq = 100000
 
     def __init__(self, account_dao):
         self.__dao = account_dao
@@ -24,6 +24,7 @@ class AccountService:
         if account:
             return account.get_balance()
         return -1
+    
     def deposit(self, account_no, amount):
         account = self.__dao.select_account_by_account_no(account_no)
         if account:
@@ -60,11 +61,11 @@ if __name__ == '__main__':
     aservice = AccountService(AccountDAO())
     aservice.create_account(Account(0, 'woongseok', 100000, '1234'))
     aservice.create_account(Account(0, 'woongseok', 200000, '1234'))
-    aservice.create_account(Account(0, 'curi', 300000, '1234'))
+    aservice.create_account(Account(0, 'cws', 300000, '1234'))
     for account in aservice.get_all_accounts():
         print(account)
     print()
-    for account in aservice.get_members_accounts('curi'):
+    for account in aservice.get_members_accounts('cws'):
         print(account)
 
     print()
@@ -75,7 +76,7 @@ if __name__ == '__main__':
         print('없는 계좌입니다.')
 
     try:
-        aservice.withdraw('hyejeong', '111112', 10000, '1234')
+        aservice.withdraw('woongseok', '111112', 10000, '1234')
     except Exception as e:
         print(type(e))
     else:
@@ -83,7 +84,7 @@ if __name__ == '__main__':
             print(account)
 
     try:
-        aservice.delete_account('curi', '111115', '1111')
+        aservice.delete_account('cws', '111115', '1111')
     except Exception as e:
         print(type(e))
     else:
