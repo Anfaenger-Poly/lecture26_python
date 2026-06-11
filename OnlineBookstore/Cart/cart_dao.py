@@ -13,7 +13,11 @@ class CartDAO:
         return True
 
     def select_cart_by_member(self, member_id):
-        return [c for c in self.__cartDB.values() if c.get_member_id() == member_id]
+        result = []
+        for c in self.__cartDB.values():
+            if c.get_member_id() == member_id:
+                result.append(c)
+        return result
 
     def select_all_carts(self):
         return list(self.__cartDB.values())
