@@ -32,7 +32,7 @@ class MemberDAO:
 # 단위테스트
 if __name__ == '__main__':
     dao = MemberDAO()
-    dao.insert_member(Member('woongseok', '1234', '최웅석', '수원', '010'))
+    dao.insert_member(Member('woongseok', '1234', '최웅석', '성남시', '010'))
     print(dao.select_member_by_id('woongseok'))
     print(dao.insert_member(Member('woongseok', '1', 'dup', 'b', 'c')))
     print(dao.select_all_members())
