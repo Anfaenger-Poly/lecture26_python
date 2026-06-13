@@ -361,7 +361,9 @@ class ConsoleBank:
     # 회원 강퇴
     def menu_delete_member(self):
         user_id = input('>> 강퇴하실 회원 아이디를 입력하세요 : ')
-        if self.msv.remove_member(user_id):
+        if user_id == MemberService.ADMIN_ID:
+            print('관리자 계정은 강퇴할 수 없습니다.')
+        if self.msv.remove_member(user_id) and MemberService.ADMIN_ID != user_id:
             print('강퇴 처리되었습니다.')
         else:
             print('강퇴 처리에 실패했습니다.')
