@@ -272,7 +272,7 @@ class ConsoleBookstore:
         if not cart_list:
             print('장바구니가 비어 있습니다.')
             return
-        address = input('>> 배송 주소 : ')  # 주소는 한 번만 입력받아 모든 배송에 사용
+        address = input('>> 배송 주소 : ')
         ordered = 0
         for cart in cart_list:
             try:
