@@ -1,5 +1,3 @@
-from Order.order_item import OrderItem
-
 class OrderItemDAO:
     def __init__(self):
         self.__orderItemDB = {}

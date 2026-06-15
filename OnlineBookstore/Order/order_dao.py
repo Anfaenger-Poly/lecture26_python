@@ -1,4 +1,3 @@
-from Order.order import Order
 from Order.order_item_dao import OrderItemDAO
 
 # 주문 데이터 접근 (CRUD) : OrderDAO
