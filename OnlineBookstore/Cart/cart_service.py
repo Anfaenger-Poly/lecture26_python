@@ -1,10 +1,11 @@
 from Cart.cart_dao import CartDAO
 from Cart.cart import Cart
+from Cart.cart_item import CartItem
 from errors import InvalidInputError
 
 # 장바구니 관리 서비스
 class CartService:
-    cart_id_seq = 1000 # 장바구니 ID 시퀀스
+    cart_id_seq = 1000
 
     def __init__(self, cart_dao):
         self.__dao = cart_dao
@@ -14,7 +15,8 @@ class CartService:
             raise InvalidInputError('수량은 1 이상이어야 합니다.')
         cart_id = str(CartService.cart_id_seq)
         CartService.cart_id_seq += 1
-        cart = Cart(cart_id, member_id, book_id, quantity)
+        cart = Cart(cart_id, member_id)
+        cart.add_item(CartItem(book_id, quantity))
         self.__dao.insert_cart(cart)
         return cart
 
