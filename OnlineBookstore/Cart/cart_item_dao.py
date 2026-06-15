@@ -1,5 +1,3 @@
-from Cart.cart_item import CartItem
-
 class CartItemDAO:
     def __init__(self):
         self.__cartItemDB = {}

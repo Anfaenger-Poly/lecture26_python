@@ -1,4 +1,3 @@
-from Cart.cart import Cart
 from Cart.cart_item_dao import CartItemDAO
 
 # 장바구니 관리 DAO
