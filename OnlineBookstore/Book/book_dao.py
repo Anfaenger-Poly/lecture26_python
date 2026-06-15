@@ -3,7 +3,9 @@ from Book.book import Book
 # 도서 관리 DAO
 class BookDAO:
     def __init__(self):
-        self.__bookDB = {}
+        self.__bookDB = {'1': Book('1', '파이썬 코딩 도장', '남재윤', 25000, 10),
+            '2': Book('2', '클린 코드', '로버트 마틴', 30000, 7),
+            '3': Book('3', '객체지향의 사실과 오해', '조영호', 22000, 5),}
 
     def insert_book(self, book):
         book_id = book.get_book_id()
