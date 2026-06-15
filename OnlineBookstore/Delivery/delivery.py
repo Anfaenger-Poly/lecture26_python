@@ -1,4 +1,3 @@
-from datetime import datetime
 from enum import StrEnum
 
 # 배송 상태 (매직 스트링 대신 열거형)
